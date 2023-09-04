@@ -14,10 +14,34 @@ class Dashboard extends Component
     public $sortDirection = 'asc';
     public $sortField = 'name';
     public $showEditModal = false;
+    public User $user;
+    public $dataa ='d';
 
-    public function edit()
+
+
+
+
+    public function rules()
     {
+        return  [
+            'user.name' => 'required',
+            'user.email' => 'required',
+            'user.status' => 'required|in:'.collect(User::STATUS)->keys()->implode(','),
+        ];
+    }
+
+    public function edit(User $user)
+    {
+        $this->user = $user;
+
         $this->showEditModal = true;
+    }
+
+    public function save()
+    {
+        $this->validate();
+        $this->user->save();
+        $this->showEditModal = false;
     }
 
     public function sortBy($field)
